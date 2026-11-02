@@ -8,7 +8,6 @@ namespace TMS.Domain.Entities
         public Guid TellerId { get; set; } 
         public decimal Amount { get; set; }
         public User Teller { get; set; } = null!;
-        public User RoleId
         public TransactionType TransactionType { get; set; } 
         public DateTime CreatedAt { get; set; }
         public string? Description { get; set; } 

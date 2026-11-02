@@ -9,7 +9,7 @@ namespace TMS.Domain.Entities
         public Request Request { get; set; } = null!;
         public Guid ApproverId { get; set; }
         public User Approver { get; set; } = null!;
-        public Guid RoleId { get; set; }
+        public int RoleId { get; set; }
         public Role Role { get; set; } = null!;
         public ApprovalDecision Decision { get; set; }
         public string? Comment { get; set; }

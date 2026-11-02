@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TMS.Application.DTOs;
 using TMS.Application.Interfaces;
 using TMS.Domain.Entities;
@@ -17,9 +18,9 @@ namespace TMS.Infrastructure.Repositories
             _passwordHashingService = passwordHashingService;
             _temporaryPasswordService = temporaryPasswordService;
         }
-        public async Task<UserDto> CreateUser(CreateUserDto createUserDto)
+        public async Task<UserDto> CreateUser(CreateUserDto createUserDto, Guid createdBy)
         {
-           bool emailExists = await _context.Users.AnyAsync(user => user.Email == createUserDto.Email);
+            bool emailExists = await _context.Users.AnyAsync(user => user.Email == createUserDto.Email);
 
             if (emailExists)
             {
@@ -45,7 +46,7 @@ namespace TMS.Infrastructure.Repositories
                 RoleId = tellerRole.Id,
                 PasswordHash = hashedPassword,
                 AccountStatus = "INACTIVE",
-                CreatedBy = null
+                CreatedBy = createdBy
             };
 
             await _context.Users.AddAsync(user);
@@ -59,8 +60,13 @@ namespace TMS.Infrastructure.Repositories
                 LastName = user.LastName,
                 Email = user.Email,
                 AccountStatus = user.AccountStatus,
-                CreatedBy = null
+                CreatedBy = user.CreatedBy
             };
+        }
+
+        public async Task<User?> GetUserById(Guid userId)
+        {
+            return await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
         }
 
         public async Task<User?> GetUserByEmail(string email)
@@ -89,6 +95,12 @@ namespace TMS.Infrastructure.Repositories
                 .Where(role => role.Id == roleId)
                 .Select(role => role.RoleName)
                 .FirstOrDefaultAsync();
+        }
+
+        public async Task UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
         }
     }
 }

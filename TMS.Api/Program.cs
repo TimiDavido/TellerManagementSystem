@@ -28,7 +28,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
 
             ValidateAudience = true,
-            ValidAudience = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
 
             ValidateLifetime = true,
 
@@ -43,6 +43,7 @@ builder.Services.AddScoped<IPasswordHashingService, PasswordHashingService>();
 builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
+builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 
 var app = builder.Build();
 

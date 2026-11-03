@@ -11,14 +11,16 @@ namespace TMS.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly ILoginService _loginService;
         private readonly IChangePasswordService _changePasswordService;
 
-        public UsersController(IUserRepository userRepository, ILoginService loginService, IChangePasswordService changePasswordService)
+        public UsersController(IUserService userService, ILoginService loginService, IChangePasswordService changePasswordService, IUserRepository userRepository)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _loginService = loginService;
             _changePasswordService = changePasswordService;
+            _userRepository = userRepository;
         }
 
         [Authorize(Roles = "HOP, IC")]
@@ -42,7 +44,7 @@ namespace TMS.Api.Controllers
                     return Unauthorized(new { message = "Invalid user ID in token." });
                 }
 
-                var user = await _userRepository.CreateUser(createUserDto, createdBy);
+                var user = await _userService.CreateUser(createUserDto, createdBy);
                 return StatusCode(StatusCodes.Status201Created, user);
             }
             catch (Exception ex)

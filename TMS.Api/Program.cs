@@ -10,12 +10,12 @@ using TMS.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -31,7 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidAudience = builder.Configuration["Jwt:Audience"],
 
             ValidateLifetime = true,
-
+             
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]!))
         };
@@ -44,6 +44,13 @@ builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>(
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
+{
+    client.BaseAddress = new Uri(
+        builder.Configuration["NotificationSettings:NotificationBaseUrl"]!
+        );
+});
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

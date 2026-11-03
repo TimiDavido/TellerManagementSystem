@@ -18,7 +18,7 @@ namespace TMS.Infrastructure.Repositories
             _passwordHashingService = passwordHashingService;
             _temporaryPasswordService = temporaryPasswordService;
         }
-        public async Task<UserDto> CreateUser(CreateUserDto createUserDto, Guid createdBy)
+        public async Task<UserDto> CreateUser(CreateUserDto createUserDto, Guid createdBy, string hashedPasssword)
         {
             bool emailExists = await _context.Users.AnyAsync(user => user.Email == createUserDto.Email);
 
@@ -34,9 +34,6 @@ namespace TMS.Infrastructure.Repositories
                 throw new Exception("Teller role not found in the database.");
             }
 
-           string defaultPassword = _temporaryPasswordService.GeneratePassword();
-           string hashedPassword = _passwordHashingService.HashPassword(defaultPassword);
-
             var user = new User
             {
                 Id = Guid.NewGuid(),
@@ -44,8 +41,8 @@ namespace TMS.Infrastructure.Repositories
                 LastName = createUserDto.LastName,
                 Email = createUserDto.Email,
                 RoleId = tellerRole.Id,
-                PasswordHash = hashedPassword,
-                AccountStatus = "INACTIVE",
+                PasswordHash = hashedPasssword,
+                AccountStatus = "ACTIVE",
                 CreatedBy = createdBy
             };
 

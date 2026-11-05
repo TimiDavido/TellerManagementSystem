@@ -55,6 +55,7 @@ namespace TMS.Application.Services
                 UserId = userId,
                 RequestType = createRequestDto.RequestType,
                 SubType = createRequestDto.SubType,
+                Description = createRequestDto.Description,
                 Status = RequestStatus.Pending,
                 SubmittedAt = DateTime.UtcNow
             };

@@ -51,6 +51,8 @@ builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
         );
 });
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IRequestService, RequestService>();
 
 var app = builder.Build();
 

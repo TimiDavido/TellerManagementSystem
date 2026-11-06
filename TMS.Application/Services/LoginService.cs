@@ -36,7 +36,7 @@ namespace TMS.Application.Services
 
             if (user.AccountStatus != "ACTIVE")
             {
-                throw new Exception("Account is not active.");
+                throw new Exception("Account is not active, contact the HOP");
             }
 
             var role = await _userRepository.GetRoleNameById(user.RoleId);

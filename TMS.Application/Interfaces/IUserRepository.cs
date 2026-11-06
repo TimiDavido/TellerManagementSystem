@@ -8,7 +8,7 @@ namespace TMS.Application.Interfaces
 {
     public interface IUserRepository
     {
-        Task<UserDto> CreateUser(CreateUserDto createUserDto, Guid createdBy);
+        Task<UserDto> CreateUser(CreateUserDto createUserDto, Guid createdBy, string hashedPassword);
         Task<User?> GetUserById(Guid userId);
         Task UpdateUser(User user);
         Task<User?> GetUserByEmail(string email);

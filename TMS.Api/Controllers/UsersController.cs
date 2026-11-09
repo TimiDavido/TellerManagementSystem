@@ -14,13 +14,17 @@ namespace TMS.Api.Controllers
         private readonly IUserService _userService;
         private readonly ILoginService _loginService;
         private readonly IChangePasswordService _changePasswordService;
+        private readonly IRefreshTokenApplicationService _refreshTokenApplicationService;
+        private readonly ILogoutService _logoutService;
 
-        public UsersController(IUserService userService, ILoginService loginService, IChangePasswordService changePasswordService, IUserRepository userRepository)
+        public UsersController(IUserService userService, ILoginService loginService, IChangePasswordService changePasswordService, IUserRepository userRepository, IRefreshTokenApplicationService refreshTokenApplicationService, ILogoutService logoutService)
         {
             _userService = userService;
             _loginService = loginService;
             _changePasswordService = changePasswordService;
             _userRepository = userRepository;
+            _refreshTokenApplicationService = refreshTokenApplicationService;
+            _logoutService = logoutService;
         }
 
         [Authorize(Roles = "HOP, IC")]
@@ -67,7 +71,8 @@ namespace TMS.Api.Controllers
 
                 return Ok(new
                 {
-                    accessToken = token,
+                    accessToken = token.AccessToken,
+                    refreshToken = token.RefreshToken,
                     tokenType = "Bearer"
                 });
             }
@@ -106,6 +111,40 @@ namespace TMS.Api.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             };
             
+        }
+
+        [HttpPost("refresh-token")]
+        [AllowAnonymous]
+        public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto request)
+        {
+            try
+            {
+                var tokens = await _refreshTokenApplicationService.RefreshToken(request.RefreshToken);
+
+                return Ok(new
+                {
+                    accessToken = tokens.AccessToken,
+                    refreshToken = tokens.RefreshToken,
+                    tokenType = "Bearer"
+                });
+            }
+
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("logout")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
+        {
+            await _logoutService.Logout(request.RefreshToken);
+
+            return Ok(new
+            {
+                message = "Logged out successfully"
+            });
         }
     }
 }

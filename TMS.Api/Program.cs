@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -45,9 +46,6 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 
-builder.Services.AddScoped<IRequestRepository, RequestRepository>();
-builder.Services.AddScoped<IRequestService, RequestService>();
-
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
 {
     client.BaseAddress = new Uri(
@@ -55,6 +53,13 @@ builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
         );
 });
 builder.Services.AddScoped<IUserService, UserService>();
+
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IRequestService, RequestService>();
+builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+builder.Services.AddScoped<IRefreshTokenApplicationService, RefreshTokenApplicationService>();
+builder.Services.AddScoped<ILogoutService, LogoutService>();
 
 var app = builder.Build();
 

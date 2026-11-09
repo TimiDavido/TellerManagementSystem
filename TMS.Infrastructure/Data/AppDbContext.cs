@@ -36,6 +36,21 @@ namespace TMS.Infrastructure.Data
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Request>()
+                .Property(r => r.Email)
+                .IsRequired()
+                .HasMaxLength(255);
+
+            modelBuilder.Entity<Request>()
+                .Property(r => r.Status)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Request>()
+                .Property(r => r.CurrentStage)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
             modelBuilder.Entity<RequestApprovalLog>()
                 .HasOne(l => l.Request)
                 .WithMany(r => r.ApprovalLogs)
@@ -53,6 +68,11 @@ namespace TMS.Infrastructure.Data
                 .WithMany()
                 .HasForeignKey(l => l.RoleId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<RequestApprovalLog>()
+                .Property(l => l.Decision)
+                .HasConversion<string>()
+                .HasMaxLength(20);
 
             modelBuilder.Entity<Transaction>()
                 .HasOne(t => t.Teller)

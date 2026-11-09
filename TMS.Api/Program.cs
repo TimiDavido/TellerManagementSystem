@@ -44,10 +44,10 @@ builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>(
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
-<<<<<<< HEAD
+
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IRequestService, RequestService>();
-=======
+
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
 {
     client.BaseAddress = new Uri(
@@ -55,11 +55,9 @@ builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
         );
 });
 builder.Services.AddScoped<IUserService, UserService>();
->>>>>>> origin/feature/auth-user-management
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

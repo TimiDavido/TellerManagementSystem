@@ -16,6 +16,7 @@ namespace TMS.Infrastructure.Data
         public DbSet<Request> Requests { get; set; }
         public DbSet<RequestApprovalLog> RequestApprovalLogs { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -63,6 +64,21 @@ namespace TMS.Infrastructure.Data
             modelBuilder.Entity<Transaction>()
                 .Property(t => t.Amount)
                 .HasPrecision(18, 2);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasOne<User>()
+                .WithMany()
+                .HasForeignKey(rt => rt.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RefreshToken>()
+                .Property(rt => rt.TokenHash)
+                .IsRequired()
+                .HasMaxLength(64);
+
+            modelBuilder.Entity<RefreshToken>()
+                .HasIndex(rt => rt.TokenHash)
+                .IsUnique();
         }
     }
 }

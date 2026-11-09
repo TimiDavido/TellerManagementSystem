@@ -48,7 +48,7 @@ namespace TMS.Api.Controllers
         }
 
         [HttpPut("{id:guid}/review")]
-        [Authorize(Roles = "IC")]
+        [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<RequestDto>> Review(Guid id, ApproveRequestDto approveRequestDto)
         {
             try

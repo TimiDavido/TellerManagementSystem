@@ -56,7 +56,8 @@ namespace TMS.Application.Services
                 RequestType = createRequestDto.RequestType,
                 SubType = createRequestDto.SubType,
                 Status = RequestStatus.Pending,
-                SubmittedAt = DateTime.UtcNow
+                SubmittedAt = DateTime.UtcNow,
+                Description = createRequestDto.Description
             };
 
             await _requestRepository.AddRequestAsync(request);

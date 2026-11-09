@@ -7,6 +7,7 @@
         public string Email { get; set; } = string.Empty;
         public string RequestType { get; set; } = string.Empty;
         public string? SubType { get; set; }
+        public string? Description { get; set; }
         public string Status { get; set; } = string.Empty;
         public DateTime SubmittedAt { get; set; }
     }

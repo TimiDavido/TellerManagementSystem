@@ -92,7 +92,6 @@ namespace TMS.Application.Services
                 Description = createRequestDto.Description,
                 Status = RequestStatus.Pending,
                 SubmittedAt = DateTime.UtcNow,
-                Description = createRequestDto.Description
             };
 
             await _requestRepository.AddRequestAsync(request);

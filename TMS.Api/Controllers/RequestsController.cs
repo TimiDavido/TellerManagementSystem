@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TMS.Application.DTOs;
 using TMS.Application.Interfaces;
+using TMS.Domain.Enums;
 
 namespace TMS.Api.Controllers
 {
@@ -22,6 +23,14 @@ namespace TMS.Api.Controllers
         {
             var value = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return Guid.Parse(value!);
+        }
+
+        [HttpGet("allRequests")]
+        [Authorize(Roles = "HOP, IC")]
+        public async Task<ActionResult<List<RequestDto>>> GetAllRequests([FromQuery] RequestStatus? status)
+        {
+            var result = await _requestService.GetAllRequestsAsync(status);
+            return Ok(result);
         }
 
         [HttpPost]

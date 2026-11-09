@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.FileProviders.Physical;
 using System.Security.Claims;
 using TMS.Application.DTOs;
 using TMS.Application.Interfaces;
@@ -10,7 +9,7 @@ namespace TMS.Api.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class RequestsController : Controller
+    public class RequestsController : ControllerBase
     {
         private readonly IRequestService _requestService;
 
@@ -43,7 +42,8 @@ namespace TMS.Api.Controllers
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<List<RequestDto>>> GetPendingRequests()
         {
-            var result = await _requestService.GetPendingRequestsAsync();
+            var role = User.FindFirstValue(ClaimTypes.Role)!;
+            var result = await _requestService.GetPendingRequestsAsync(role);
             return Ok(result);
         }
 
@@ -51,9 +51,10 @@ namespace TMS.Api.Controllers
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<RequestDto>> Review(Guid id, ApproveRequestDto approveRequestDto)
         {
+            var role = User.FindFirstValue(ClaimTypes.Role)!;
             try
             {
-                var result = await _requestService.ApproveRequestAsync(id, GetCurrentUserId(), approveRequestDto);
+                var result = await _requestService.ApproveRequestAsync(id, GetCurrentUserId(), role, approveRequestDto);
                 return Ok(result);
             }
             catch (KeyNotFoundException ex)
@@ -63,6 +64,10 @@ namespace TMS.Api.Controllers
             catch (InvalidOperationException ex)
             {
                 return Conflict(ex.Message);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, ex.Message);
             }
             catch (ArgumentException ex)
             {

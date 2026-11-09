@@ -45,6 +45,13 @@ builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>(
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+<<<<<<< HEAD
+=======
+
+builder.Services.AddScoped<IRequestRepository, RequestRepository>();
+builder.Services.AddScoped<IRequestService, RequestService>();
+
+>>>>>>> origin/feature/requests-transactions
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
 {
     client.BaseAddress = new Uri(
@@ -52,16 +59,18 @@ builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
         );
 });
 builder.Services.AddScoped<IUserService, UserService>();
+<<<<<<< HEAD
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
 builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<IRefreshTokenService, RefreshTokenService>();
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
 builder.Services.AddScoped<IRefreshTokenApplicationService, RefreshTokenApplicationService>();
 builder.Services.AddScoped<ILogoutService, LogoutService>();
+=======
+>>>>>>> origin/feature/requests-transactions
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();

@@ -13,6 +13,7 @@ namespace TMS.Application.DTOs
 
         [Required]
         [MinLength(8)]
+        [MaxLength(16)]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9\s]).+$",
         ErrorMessage = "Password must contain an uppercase letter, a lowercase letter, a number, and a special character.")]
         public string NewPassword { get; set; } = string.Empty;

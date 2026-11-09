@@ -1,6 +1,13 @@
 @TMS.Api_HostAddress = http://localhost:5084
 
-GET {{TMS.Api_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{TMS.Api_HostAddress}}/api/users/login
+Content-type: application/json
+
+{"email": "teller@test.com", "password": "..."}
 
 ###
+POST {{host}}/api/requests
+Authorization: Bearer PASTE_TELLER_TOKEN
+Content-type: application/json
+
+{"requestType": "Access", "subType": "Branch", "description": "Need access"}

@@ -47,11 +47,6 @@ namespace TMS.Infrastructure.Data
                 .HasConversion<string>()
                 .HasMaxLength(20);
 
-            modelBuilder.Entity<Request>()
-                .Property(r => r.CurrentStage)
-                .HasConversion<string>()
-                .HasMaxLength(20);
-
             modelBuilder.Entity<RequestApprovalLog>()
                 .HasOne(l => l.Request)
                 .WithMany(r => r.ApprovalLogs)

@@ -12,7 +12,6 @@ namespace TMS.Domain.Entities
         public string? SubType { get; set; }
         public string? Description { get; set; }
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
-        public ApprovalStage CurrentStage { get; set; } = ApprovalStage.HOP;
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
         public ICollection<RequestApprovalLog> ApprovalLogs { get; set; } = new List<RequestApprovalLog>();
     }

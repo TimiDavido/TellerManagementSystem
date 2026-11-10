@@ -40,6 +40,9 @@ namespace TMS.Application.Services
                 throw new InvalidOperationException("This request has already been reviewed");
             }
 
+            if (!Enum.IsDefined(typeof(ApprovalDecision), approveRequestDto.Decision))
+                throw new ArgumentException("Decision must be 'approved' or 'rejected'.");
+
             if (approveRequestDto.Decision == ApprovalDecision.Rejected && string.IsNullOrWhiteSpace(approveRequestDto.Comment))
                 throw new ArgumentException("A comment is required when rejecting a request.");
 
@@ -111,7 +114,7 @@ namespace TMS.Application.Services
             {
                 "HOP" => RequestStatus.Pending,
                 "IC" => RequestStatus.PendingIC,
-                _ => throw new ArgumentException("You are not allowed to review requests.")
+                _ => throw new UnauthorizedAccessException("You are not allowed to review requests.")
             };
             var requests = await _requestRepository.GetRequestsByStatusAsync(status);
             return requests.Select(MapToDto).ToList();
@@ -132,6 +135,7 @@ namespace TMS.Application.Services
                 Email = request.Email,
                 RequestType = request.RequestType,
                 SubType = request.SubType,
+                Description = request.Description,
                 Status = request.Status.ToString(),
                 SubmittedAt = request.SubmittedAt
             };

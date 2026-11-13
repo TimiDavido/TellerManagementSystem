@@ -47,6 +47,7 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
 
+
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
 {
     client.BaseAddress = new Uri(
@@ -70,7 +71,7 @@ builder.Services.AddScoped<IRefreshTokenApplicationService, RefreshTokenApplicat
 builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
-//builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
 

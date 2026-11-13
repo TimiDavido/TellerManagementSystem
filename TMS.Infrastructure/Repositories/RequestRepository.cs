@@ -17,7 +17,7 @@ namespace TMS.Infrastructure.Repositories
 
         public async Task<Request> AddRequestAsync(Request request)
         {
-            _context.Requests.Add(request);
+            await _context.Requests.AddAsync(request);
             await _context.SaveChangesAsync();
             return request;
         }
@@ -54,7 +54,7 @@ namespace TMS.Infrastructure.Repositories
 
         public async Task SaveReviewAsync(Request request, RequestApprovalLog log)
         {
-            _context.RequestApprovalLogs.Add(log);
+            await _context.RequestApprovalLogs.AddAsync(log);
             await _context.SaveChangesAsync();
         }
     }

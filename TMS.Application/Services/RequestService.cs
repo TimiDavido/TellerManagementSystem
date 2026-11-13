@@ -41,7 +41,7 @@ namespace TMS.Application.Services
             }
 
             if (!Enum.IsDefined(typeof(ApprovalDecision), approveRequestDto.Decision))
-                throw new ArgumentException("Decision must be 'approved' or 'rejected'.");
+                throw new ArgumentOutOfRangeException("Decision must be 'approved' or 'rejected'.");
 
             if (approveRequestDto.Decision == ApprovalDecision.Rejected && string.IsNullOrWhiteSpace(approveRequestDto.Comment))
                 throw new ArgumentException("A comment is required when rejecting a request.");

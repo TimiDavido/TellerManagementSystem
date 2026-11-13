@@ -39,8 +39,6 @@ namespace TMS.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateUser(CreateUserDto createUserDto)
         {     
-            try
-            {
                 var createdById = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (!Guid.TryParse(createdById, out Guid createdBy))
@@ -50,24 +48,12 @@ namespace TMS.Api.Controllers
 
                 var user = await _userService.CreateUser(createUserDto, createdBy);
                 return StatusCode(StatusCodes.Status201Created, user);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto loginDto)
         {
-            try
-            {
                 var token = await _loginService.Login(loginDto.Email, loginDto.Password);
-
-                if (token == null)
-                {
-                    return Unauthorized(new { message = "Invalid email or password." });
-                }
 
                 return Ok(new
                 {
@@ -75,20 +61,12 @@ namespace TMS.Api.Controllers
                     refreshToken = token.RefreshToken,
                     tokenType = "Bearer"
                 });
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
         }
 
         [HttpPut("change-password")]
         [Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
         {
-            try
-            {
                 var userIdValue = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                 if (!Guid.TryParse(userIdValue, out Guid userId))
@@ -104,12 +82,6 @@ namespace TMS.Api.Controllers
                 }
 
                 return Ok(new { message = "Password changed successfully." });
-            }
-
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            };
             
         }
 
@@ -117,8 +89,6 @@ namespace TMS.Api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RefreshToken(RefreshTokenRequestDto request)
         {
-            try
-            {
                 var tokens = await _refreshTokenApplicationService.RefreshToken(request.RefreshToken);
 
                 return Ok(new
@@ -127,16 +97,10 @@ namespace TMS.Api.Controllers
                     refreshToken = tokens.RefreshToken,
                     tokenType = "Bearer"
                 });
-            }
-
-            catch(Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
         }
 
         [HttpPost("logout")]
-        [AllowAnonymous]
+        [AllowAnonymous]               
         public async Task<IActionResult> Logout(RefreshTokenRequestDto request)
         {
             await _logoutService.Logout(request.RefreshToken);

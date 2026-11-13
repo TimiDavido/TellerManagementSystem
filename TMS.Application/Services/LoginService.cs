@@ -30,26 +30,26 @@ namespace TMS.Application.Services
 
             if (user == null)
             {
-                throw new Exception("Invalid email or password.");
+                throw new UnauthorizedAccessException("Invalid email or password.");
             }
 
             bool passwordIsValid = _passwordHashingService.VerifyPassword(user.PasswordHash, password);
 
             if (!passwordIsValid)
             {
-                throw new Exception("Invalid email or password.");
+                throw new UnauthorizedAccessException("Invalid email or password.");
             }
 
             if (user.AccountStatus != "ACTIVE")
             {
-                throw new Exception("Account is not active, contact the HOP");
+                throw new UnauthorizedAccessException("Account is not active, contact the HOP");
             }
 
             var role = await _userRepository.GetRoleNameById(user.RoleId);
 
             if (role == null)
             {
-                throw new Exception("User role not found.");
+                throw new UnauthorizedAccessException("User role not found.");
             }
 
             var accessToken = _jwtTokenService.GenerateToken(user.Id, user.Email, role);

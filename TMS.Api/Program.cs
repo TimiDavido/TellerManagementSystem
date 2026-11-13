@@ -53,6 +53,13 @@ builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
         builder.Configuration["NotificationSettings:NotificationBaseUrl"]!
         );
 });
+
+builder.Services.AddHttpClient<IAccountValidationService, AccountValidationService>(client =>
+{
+    client.BaseAddress = new Uri(
+        builder.Configuration["BankApi:BaseUrl"]!
+        );
+});
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IRequestRepository, RequestRepository>();
@@ -63,6 +70,7 @@ builder.Services.AddScoped<IRefreshTokenApplicationService, RefreshTokenApplicat
 builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+//builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@ using TMS.Application.DTOs;
 
 namespace TMS.Application.Interfaces
 {
-    public  interface IRefreshTokenApplicationService
+    public interface IRefreshTokenApplicationService
     {
         Task<LoginResponseDto> RefreshToken(string refreshToken);
     }

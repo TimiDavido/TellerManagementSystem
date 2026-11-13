@@ -31,36 +31,36 @@ namespace TMS.Application.Services
 
             if (storedToken == null)
             {
-                throw new Exception("Invalid refresh token.");
+                throw new UnauthorizedAccessException("Invalid refresh token.");
             }
               
             if (storedToken.RevokedAt != null)
             {
-                throw new Exception("Refresh token has been revoked.");
+                throw new UnauthorizedAccessException("Refresh token has been revoked.");
             }
                 
             if (storedToken.ExpiresAt <= DateTime.UtcNow)
             {
-                throw new Exception("Refresh token has expired.");
+                throw new UnauthorizedAccessException("Refresh token has expired.");
             }
                 
             var user = await _userRepository.GetUserById(storedToken.UserId);
 
             if (user == null)
             {
-                throw new Exception("User not found.");
+                throw new UnauthorizedAccessException("User not found.");
             }
                 
             if (user.AccountStatus != "ACTIVE")
             {
-                throw new Exception("Account is not active.");
+                throw new UnauthorizedAccessException("Account is not active.");
             }
 
             var role = await _userRepository.GetRoleNameById(user.RoleId);
 
             if (role == null)
             {
-                throw new Exception("User role not found.");
+                throw new InvalidOperationException("User role not found.");
             }
 
             var newAccessToken = _jwtTokenService.GenerateToken( user.Id, user.Email, role);

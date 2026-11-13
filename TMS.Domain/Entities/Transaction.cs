@@ -10,7 +10,7 @@ namespace TMS.Domain.Entities
         public User Teller { get; set; } = null!;
         public TransactionType TransactionType { get; set; } 
         public string AccountNumber { get; set; } = string.Empty;
-        public string? AccountName { get; set; }
+        public string AccountName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string? Description { get; set; } 
     }

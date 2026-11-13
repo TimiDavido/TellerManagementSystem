@@ -46,6 +46,7 @@ builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>(
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>
 {
@@ -70,7 +71,7 @@ builder.Services.AddScoped<IRefreshTokenApplicationService, RefreshTokenApplicat
 builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
-//builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 var app = builder.Build();
 

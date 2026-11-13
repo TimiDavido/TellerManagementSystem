@@ -8,13 +8,10 @@ namespace TMS.Domain.Entities
         public Guid TellerId { get; set; } 
         public decimal Amount { get; set; }
         public User Teller { get; set; } = null!;
-<<<<<<< HEAD
-=======
         public TransactionType TransactionType { get; set; }
         public string AccountNumber { get; set; } = string.Empty;
         public string AccountName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
->>>>>>> origin/feature/auth-user-management
         public string? Description { get; set; } 
     }
 }

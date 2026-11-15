@@ -1,5 +1,7 @@
-﻿using TMS.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using TMS.Application.Interfaces;
 using TMS.Domain.Entities;
+using TMS.Domain.Enums;
 using TMS.Infrastructure.Data;
 
 namespace TMS.Infrastructure.Repositories
@@ -17,6 +19,35 @@ namespace TMS.Infrastructure.Repositories
         {
             await _context.Transactions.AddAsync(transaction);
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Transaction>> GetAllTransactions(TransactionType? type, DateTime? fromUtc, DateTime? toUtc)
+        {
+            var query = _context.Transactions.AsNoTracking().AsQueryable();
+
+            if (type.HasValue)
+                query = query.Where(t => t.TransactionType == type.Value);
+
+            if (fromUtc.HasValue)
+                query = query.Where(t => t.CreatedAt >= fromUtc.Value);
+
+            if (toUtc.HasValue)
+                query = query.Where(t => t.CreatedAt < toUtc.Value);
+
+            return await query.OrderByDescending(t => t.CreatedAt).ToListAsync();
+        }
+
+        public async Task<Transaction?> GetTransactionById(Guid transactionId)
+        {
+            return await _context.Transactions.AsNoTracking().FirstOrDefaultAsync(t => t.Id == transactionId);
+        }
+
+        public async Task<List<Transaction>> GetTransactionsByTellerId(Guid tellerId)
+        {
+            return await _context.Transactions.AsNoTracking()
+                .Where(t => t.TellerId == tellerId)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
         }
     }
 }

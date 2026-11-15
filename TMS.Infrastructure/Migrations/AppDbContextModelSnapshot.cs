@@ -160,7 +160,8 @@ namespace TMS.Infrastructure.Migrations
 
                     b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<decimal>("Amount")
                         .HasPrecision(18, 2)
@@ -175,8 +176,10 @@ namespace TMS.Infrastructure.Migrations
                     b.Property<Guid>("TellerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TransactionType")
-                        .HasColumnType("int");
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 

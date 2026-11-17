@@ -56,6 +56,9 @@ namespace TMS.Api.Controllers
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<List<TransactionDto>>> GetAllTransactions([FromQuery] TransactionType? transactionType, [FromQuery] DateTime? fromUtc, [FromQuery] DateTime? toUtc)
         {
+            if (!GetUserId(out var userId))
+                return Unauthorized(new { message = "Invalid user ID in token." });
+
             var result = await _transactionService.GetAllTransactionsAsync(transactionType, fromUtc, toUtc);
             return Ok(result);
         }
@@ -64,7 +67,7 @@ namespace TMS.Api.Controllers
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<TransactionDto?>> GetTransactionById(Guid transactionId)
         {
-            if (GetUserId(out var userId))
+            if (!GetUserId(out var userId))
                 return Unauthorized(new { message = "Invalid user ID in token." });
 
             var role = User.FindFirst(ClaimTypes.Role)?.Value ?? string.Empty;

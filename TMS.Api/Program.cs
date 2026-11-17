@@ -46,6 +46,7 @@ builder.Services.AddScoped<ITemporaryPasswordService, TemporaryPasswordService>(
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<ILoginService, LoginService>();
 builder.Services.AddScoped<IChangePasswordService, ChangePasswordService>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
 
 builder.Services.AddHttpClient<IEmailService, EmailService>(client =>

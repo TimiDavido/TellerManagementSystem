@@ -19,7 +19,7 @@ namespace TMS.Application.Services
             _accountValidationService = accountValidationService;
         }
 
-        public async Task<Transaction> CreateTransaction(CreateTransactionDto dto, Guid TellerId)
+        public async Task<Transaction> CreateTransactionAsync(CreateTransactionDto dto, Guid TellerId)
         {
             if (dto.Amount <= 0)
             {
@@ -47,7 +47,7 @@ namespace TMS.Application.Services
                     balanceAfter = balanceBefore + dto.Amount;
                     break;
 
-                case TransactionType.Withdrawal:
+                case TransactionType.Withdraw:
                     if (balanceBefore < dto.Amount)
                     {
                         throw new InvalidOperationException("Insufficient funds for withdrawal.");
@@ -71,9 +71,37 @@ namespace TMS.Application.Services
                 Description = dto.Description
             };
 
-            await _transactionRepository.AddTransaction(transaction);
+            await _transactionRepository.AddTransactionAsync(transaction);
 
             return transaction;
         }
+
+        public async Task<List<TransactionDto>> GetAllTransactionsAsync(TransactionType? transactionType, DateTime? fromUtc, DateTime? toUtc)
+        {
+            var transactions = await _transactionRepository.GetAllTransactionsAsync(transactionType, fromUtc, toUtc);
+            return transactions.Select(MapToDto).ToList();
+        }
+
+        public Task<TransactionDto?> GetTransactionByIdAsync(Guid transactionId, Guid userId, string userRole)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<TransactionDto>> GetTransactionByTellerIdAsync(Guid tellerId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static TransactionDto MapToDto(Transaction t) => new()
+        {
+            Id = t.Id,
+            TellerId = t.TellerId,
+            AccountNumber = t.AccountNumber,
+            AccountName = t.AccountName,
+            Amount = t.Amount,
+            TransactionType = t.TransactionType.ToString(),
+            CreatedAt = t.CreatedAt,
+            Description = t.Description,
+        };
     }
 }

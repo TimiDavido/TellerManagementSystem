@@ -1,4 +1,7 @@
-﻿using TMS.Application.DTOs;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using TMS.Application.DTOs;
 using TMS.Application.Interfaces;
 using TMS.Domain.Entities;
 using TMS.Domain.Enums;
@@ -79,14 +82,23 @@ namespace TMS.Application.Services
             return transactions.Select(MapToDto).ToList();
         }
 
-        public Task<TransactionDto?> GetTransactionByIdAsync(Guid transactionId, Guid userId, string userRole)
+        public async Task<TransactionDto?> GetTransactionByIdAsync(Guid transactionId, Guid userId, string userRole)
         {
-            throw new NotImplementedException();
+            var transaction  = await _transactionRepository.GetTransactionByIdAsync(transactionId);
+
+            if (transaction is null)
+                return null;
+
+            if (userRole == "Teller" && transaction.TellerId != userId)
+                return null;
+
+            return MapToDto(transaction);
         }
 
-        public Task<List<TransactionDto>> GetTransactionByTellerIdAsync(Guid tellerId)
+        public async Task<List<TransactionDto>> GetTransactionByTellerIdAsync(Guid tellerId)
         {
-            throw new NotImplementedException();
+            var transactions = await _transactionRepository.GetTransactionsByTellerIdAsync(tellerId);
+            return transactions.Select(MapToDto).ToList();
         }
 
         private static TransactionDto MapToDto(Transaction t) => new()

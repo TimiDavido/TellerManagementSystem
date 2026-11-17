@@ -42,14 +42,6 @@ namespace TMS.Infrastructure.Repositories
             return await _context.Transactions.AsNoTracking().FirstOrDefaultAsync(t => t.Id == transactionId);
         }
 
-        public async Task<List<Transaction>> GetTransactionsByTellerId(Guid tellerId)
-        {
-            return await _context.Transactions.AsNoTracking()
-                .Where(t => t.TellerId == tellerId)
-                .OrderByDescending(t => t.CreatedAt)
-                .ToListAsync();
-        }
-
         public async Task<List<Transaction>> GetTransactionsByTellerIdAsync(Guid tellerId)
         {
             return await _context.Transactions

@@ -8,7 +8,7 @@ namespace TMS.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles ="TELLER")]
+    [Authorize(Roles ="Teller")]
     public class TransactionsController : ControllerBase
     {
         private readonly ITransactionService _transactionService;

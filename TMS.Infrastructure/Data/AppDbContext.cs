@@ -80,6 +80,15 @@ namespace TMS.Infrastructure.Data
                 .Property(t => t.Amount)
                 .HasPrecision(18, 2);
 
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.TransactionType)
+                .HasConversion<string>()
+                .HasMaxLength(20);
+
+            modelBuilder.Entity<Transaction>()
+                .Property(t => t.AccountNumber)
+                .HasMaxLength(10);
+
             modelBuilder.Entity<RefreshToken>()
                 .HasOne<User>()
                 .WithMany()

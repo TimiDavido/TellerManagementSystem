@@ -1,4 +1,5 @@
-﻿using TMS.Domain.Enums;
+﻿using System.Text.Json.Serialization;
+using TMS.Domain.Enums;
 
 namespace TMS.Application.DTOs
 {
@@ -6,6 +7,7 @@ namespace TMS.Application.DTOs
     {
         public string AccountNumber { get; set; } = string.Empty;
         public decimal Amount { get; set; }
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public TransactionType TransactionType { get; set; }
         public string? Description { get; set; }
     }

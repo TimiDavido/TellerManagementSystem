@@ -75,5 +75,20 @@ namespace TMS.Application.Services
 
             return transaction;
         }
+
+        public async Task<List<Transaction>> GetAllTransactions(TransactionType? type, DateTime? fromUtc, DateTime? toUtc)
+        {
+            return await _transactionRepository.GetAllTransactions(type, fromUtc, toUtc);
+        }
+
+        public async Task<Transaction?> GetTransactionById(Guid transactionId)
+        {
+            return await _transactionRepository.GetTransactionById(transactionId);
+        }
+
+        public async Task<List<Transaction>> GetTransactionByTellerId(Guid tellerId)
+        {
+            return await _transactionRepository.GetTransactionsByTellerId(tellerId);
+        }
     }
 }

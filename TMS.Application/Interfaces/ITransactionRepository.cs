@@ -6,9 +6,9 @@ namespace TMS.Application.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task AddTransaction(Transaction transaction);
-        Task<Transaction?> GetTransactionById(Guid transactionId);
-        Task<List<Transaction>> GetTransactionsByTellerId(Guid tellerId);
-        Task<List<Transaction>> GetAllTransactions(TransactionType? type, DateTime? fromUtc, DateTime? toUtc);
+        Task AddTransactionAsync(Transaction transaction);
+        Task<List<Transaction>> GetAllTransactionsAsync(TransactionType? type, DateTime? fromUtc, DateTime? toUtc);
+        Task<Transaction?> GetTransactionByIdAsync(Guid transactionId);
+        Task<List<Transaction>> GetTransactionsByTellerIdAsync(Guid tellerId);
     }
 }

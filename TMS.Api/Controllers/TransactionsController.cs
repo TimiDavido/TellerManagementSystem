@@ -41,7 +41,7 @@ namespace TMS.Api.Controllers
             return Ok(transaction);
         }
 
-        [HttpGet("GetMyTransactions")]
+        [HttpGet("myTransactions")]
         [Authorize(Roles = "Teller")]
         public async Task<ActionResult<List<TransactionDto>>> GetMyTransactions()
         {
@@ -52,7 +52,7 @@ namespace TMS.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetAllTransactions")]
+        [HttpGet("allTransactions")]
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<List<TransactionDto>>> GetAllTransactions([FromQuery] TransactionType? transactionType, [FromQuery] DateTime? fromUtc, [FromQuery] DateTime? toUtc)
         {
@@ -60,7 +60,7 @@ namespace TMS.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("GetTransactionById")]
+        [HttpGet("transactionById")]
         [Authorize(Roles = "HOP, IC")]
         public async Task<ActionResult<TransactionDto?>> GetTransactionById(Guid transactionId)
         {

@@ -15,13 +15,13 @@ namespace TMS.Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task AddTransaction(Transaction transaction)
+        public async Task AddTransactionAsync(Transaction transaction)
         {
             await _context.Transactions.AddAsync(transaction);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<List<Transaction>> GetAllTransactions(TransactionType? type, DateTime? fromUtc, DateTime? toUtc)
+        public async Task<List<Transaction>> GetAllTransactionsAsync(TransactionType? type, DateTime? fromUtc, DateTime? toUtc)
         {
             var query = _context.Transactions.AsNoTracking().AsQueryable();
 
@@ -37,7 +37,7 @@ namespace TMS.Infrastructure.Repositories
             return await query.OrderByDescending(t => t.CreatedAt).ToListAsync();
         }
 
-        public async Task<Transaction?> GetTransactionById(Guid transactionId)
+        public async Task<Transaction?> GetTransactionByIdAsync(Guid transactionId)
         {
             return await _context.Transactions.AsNoTracking().FirstOrDefaultAsync(t => t.Id == transactionId);
         }
@@ -45,6 +45,15 @@ namespace TMS.Infrastructure.Repositories
         public async Task<List<Transaction>> GetTransactionsByTellerId(Guid tellerId)
         {
             return await _context.Transactions.AsNoTracking()
+                .Where(t => t.TellerId == tellerId)
+                .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<List<Transaction>> GetTransactionsByTellerIdAsync(Guid tellerId)
+        {
+            return await _context.Transactions
+                .AsNoTracking()
                 .Where(t => t.TellerId == tellerId)
                 .OrderByDescending(t => t.CreatedAt)
                 .ToListAsync();

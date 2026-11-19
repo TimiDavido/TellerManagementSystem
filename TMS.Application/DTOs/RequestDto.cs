@@ -9,6 +9,8 @@
         public string? SubType { get; set; }
         public string? Description { get; set; }
         public string Status { get; set; } = string.Empty;
+        public DateOnly? LeaveStart { get; set; }
+        public DateOnly? LeaveEnd { get; set; }
         public DateTime SubmittedAt { get; set; }
     }
 }

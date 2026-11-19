@@ -14,5 +14,9 @@ namespace TMS.Domain.Entities
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public DateTime SubmittedAt { get; set; } = DateTime.UtcNow;
         public ICollection<RequestApprovalLog> ApprovalLogs { get; set; } = new List<RequestApprovalLog>();
+        public DateOnly? LeaveStart { get; set; }
+        public DateOnly? LeaveEnd { get; set; }
+        public LeaveProgress? LeaveProgress { get; set; }
+        public bool AccountInactive { get; set; }
     }
 }

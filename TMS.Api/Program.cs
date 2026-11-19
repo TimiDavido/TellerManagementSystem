@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.Text.Json.Serialization;
+using TMS.Api.BackgroundServices;
 using TMS.Api.Exceptions;
 using TMS.Application.Interfaces;
 using TMS.Application.Services;
@@ -72,6 +73,8 @@ builder.Services.AddScoped<ILogoutService, LogoutService>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<ILeaveStatusService, LeaveStatusService>();
+builder.Services.AddHostedService<LeaveStatusWorker>();
 
 var app = builder.Build();
 

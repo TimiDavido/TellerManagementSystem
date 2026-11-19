@@ -32,6 +32,13 @@ namespace TMS.Infrastructure.Repositories
             return await query.OrderByDescending(r => r.SubmittedAt).ToListAsync();
         }
 
+        public async Task<List<Request>> GetLeavesByProgressAsync(LeaveProgress leaveProgress)
+        {
+            return await _context.Requests
+                .Where(r => r.LeaveProgress == leaveProgress)
+                .ToListAsync();
+        }
+
         public async Task<List<Request>> GetPendingRequestAsync()
         {
             return await _context.Requests.Where(r => r.Status == RequestStatus.Pending).OrderBy(r => r.SubmittedAt).ToListAsync();
@@ -55,6 +62,12 @@ namespace TMS.Infrastructure.Repositories
         public async Task SaveReviewAsync(Request request, RequestApprovalLog log)
         {
             await _context.RequestApprovalLogs.AddAsync(log);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateRequestAsync(Request request)
+        {
+            _context.Requests.Update(request);
             await _context.SaveChangesAsync();
         }
     }

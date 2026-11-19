@@ -61,6 +61,9 @@ namespace TMS.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("AccountInactive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -68,6 +71,16 @@ namespace TMS.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateOnly?>("LeaveEnd")
+                        .HasColumnType("date");
+
+                    b.Property<string>("LeaveProgress")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateOnly?>("LeaveStart")
+                        .HasColumnType("date");
 
                     b.Property<string>("RequestType")
                         .IsRequired()

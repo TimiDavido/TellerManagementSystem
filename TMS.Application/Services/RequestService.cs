@@ -40,6 +40,16 @@ namespace TMS.Application.Services
                 throw new InvalidOperationException("This request has already been reviewed");
             }
 
+            if (request.Status == RequestStatus.Approved && request.LeaveStart is not null)
+            {
+                request.LeaveProgress = LeaveProgress.Scheduled;
+            }
+
+            if (request.Status == RequestStatus.Rejected && request.LeaveStart is not null)
+            {
+                request.LeaveProgress = LeaveProgress.Rejected;
+            }
+
             if (!Enum.IsDefined(typeof(ApprovalDecision), approveRequestDto.Decision))
                 throw new ArgumentOutOfRangeException("Decision must be 'approved' or 'rejected'.");
 
@@ -60,6 +70,12 @@ namespace TMS.Application.Services
             };
 
             request.Status = approveRequestDto.Decision == ApprovalDecision.Rejected ? RequestStatus.Rejected : request.Status == RequestStatus.Pending ? RequestStatus.PendingIC : RequestStatus.Approved;
+
+            if (request.Status == RequestStatus.Approved && request.LeaveStart is not null)
+                request.LeaveProgress = LeaveProgress.Scheduled;
+
+            if (request.Status == RequestStatus.Rejected && request.LeaveStart is not null)
+                request.LeaveProgress = LeaveProgress.Rejected;
 
             await _requestRepository.SaveReviewAsync(request, log);
 
@@ -85,6 +101,8 @@ namespace TMS.Application.Services
         {
             var user = await _userRepository.GetUserById(userId) ?? throw new KeyNotFoundException($"User not found.");
 
+            var isLeave = string.Equals(createRequestDto.RequestType, "Leave", StringComparison.OrdinalIgnoreCase);
+
             var request = new Request
             {
                 Id = Guid.NewGuid(),
@@ -95,7 +113,29 @@ namespace TMS.Application.Services
                 Description = createRequestDto.Description,
                 Status = RequestStatus.Pending,
                 SubmittedAt = DateTime.UtcNow,
+                LeaveStart = isLeave ? createRequestDto.LeaveStart : null,
+                LeaveEnd = isLeave ? createRequestDto.LeaveEnd : null,
             };
+
+            var today = DateOnly.FromDateTime(DateTime.UtcNow.AddHours(1));
+
+            if (isLeave)
+            {
+                if (createRequestDto.LeaveStart is null || createRequestDto.LeaveEnd is null)
+                    throw new ArgumentException("A leave request must have both a start and end date.");
+
+                if (createRequestDto.LeaveStart < today)
+                    throw new ArgumentException("Leave start date cannot be in the past.");
+
+                if (createRequestDto.LeaveEnd < createRequestDto.LeaveStart)
+                    throw new ArgumentException("Leave end date cannot be before the start date.");
+            }
+
+            if (!isLeave)
+            {
+                if (createRequestDto.LeaveStart is not null || createRequestDto.LeaveEnd is not null)
+                    throw new ArgumentException("Dates can only be added for a leave request!");
+            }
 
             await _requestRepository.AddRequestAsync(request);
             return MapToDto(request);
@@ -137,7 +177,9 @@ namespace TMS.Application.Services
                 SubType = request.SubType,
                 Description = request.Description,
                 Status = request.Status.ToString(),
-                SubmittedAt = request.SubmittedAt
+                SubmittedAt = request.SubmittedAt,
+                LeaveStart = request.LeaveStart,
+                LeaveEnd = request.LeaveEnd,
             };
         }
     }

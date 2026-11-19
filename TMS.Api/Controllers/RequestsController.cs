@@ -36,19 +36,8 @@ namespace TMS.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<RequestDto>> Create(CreateRequestDto createRequestDto)
         {
-            try
-            {
-                var result = await _requestService.CreateRequestAsync(GetCurrentUserId(), createRequestDto);
-                return Ok(result);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(new { message = ex.Message });
-            }
+            var result = await _requestService.CreateRequestAsync(GetCurrentUserId(), createRequestDto);
+            return Ok(result);
         }
 
         [HttpGet("myRequest")]

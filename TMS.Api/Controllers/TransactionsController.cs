@@ -26,7 +26,7 @@ namespace TMS.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Teller")]
+        [Authorize(Roles = "TELLER")]
         public async Task<IActionResult> CreateTransactionAsync(CreateTransactionDto dto)
         {
             var tellerId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
